@@ -5,15 +5,23 @@
       {{ message.message }}
     </p>
     <p class="text-right text-sm text-gray-700">
-    {{ message.date }}
+    {{ formattedDate }}
     </p>
   </li>
 </template>
 
 <script>
+import { formatRelative, parseISO } from 'date-fns'
+
 export default {
   props: {
     message: Object
+  },
+
+  data() {
+    return {
+      formattedDate: formatRelative(parseISO(this.message.date), new Date())
+    }
   }
 }
 </script>
