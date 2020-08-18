@@ -1,10 +1,8 @@
-<template>
-  <div />
-</template>
-
 <script>
 import L from 'leaflet'
 export default {
+  render: () => null,
+  
   props: {
     coordinates: Object,
     room: String
