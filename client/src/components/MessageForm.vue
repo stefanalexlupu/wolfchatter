@@ -3,7 +3,7 @@
     <input v-model="userName" type="text" placeholder="Write your username here">
     <div>
       <input v-model="message" type="text" placeholder="Write message here">
-      <input type="submit" value="SEND">
+      <button @click="onSubmit">SEND</button>
     </div>
   </form>
 </template>

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
 import VueSocketIO from 'vue-socket.io'
+import '@/assets/css/tailwind.css'
 
 Vue.config.productionTip = false
 
