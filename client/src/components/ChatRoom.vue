@@ -1,9 +1,9 @@
 <template>
-  <div class="chatroom">
-    <p v-if="!$store.state.activeRoom">Click on the map to start a chat</p> 
-    <div v-else>
-      <p class="chatroom__title">{{ $store.state.activeRoom }}</p>
-      <ul class="chatroom__messages">
+  <div class="chatroom fixed top-2 right-2 z-1000 p-4 bg-white bg-opacity-90 rounded shadow">
+    <p v-if="!$store.state.activeRoom" class="font-bold">Click on the map to start a chat</p> 
+    <div v-else class="flex flex-col h-full">
+      <p class="chatroom__title text-center font-bold">{{ $store.state.activeRoom }}</p>
+      <ul class="chatroom__messages my-6 px-2 flex-grow overflow-y-auto">
         <Message v-for="(message, index) in $store.state.messages" :key="index" :message="message"/>
       </ul>
       <MessageForm />
@@ -21,21 +21,12 @@ export default {
 
 <style>
 .chatroom {
-  position: fixed;
-  top: 2rem;
-  right: 2rem;
-  max-height: 60%;
+  height: 60%;
   width: 400px;
-  background-color: white;
-  z-index: 1000;
-  padding: 1rem;
-}
-
-.chatroom__title {
-  text-align: center;
 }
 
 .chatroom__messages {
-  margin: 1rem 0;
+  height: 60%;
+  overflow: auto;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="h-screen w-screen">
     <Map />
     <ChatRoom />
   </div>
@@ -22,9 +22,3 @@ export default {
 }
 </script>
 
-<style>
-#app {
-  height: 100vh;
-  width: 100vw;
-}
-</style>

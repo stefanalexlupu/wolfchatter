@@ -1,5 +1,5 @@
 <template>
-  <div id="map" style="height: 100vh">
+  <div id="map" class="h-full">
     <div v-if="isMapLoaded">
       <MapMarker v-for="room in $store.state.rooms" :key="room.name" :coordinates="room.coordinates" :room="room.name" @create="addMarkerToMap"/> 
     </div>
