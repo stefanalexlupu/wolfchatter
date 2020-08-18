@@ -46,15 +46,6 @@ export default new Vuex.Store({
       } catch(error) {
         console.error(error)
       }
-    },
-    async selectRoom(context, roomName) {
-      try {
-        const room = await api.getRoom(roomName)
-        context.commit('setMessages', room.messages);
-        context.commit('setRoom', room.chatroomName)
-      } catch(error) {
-        console.error(error)
-      }
     }
   }
 })

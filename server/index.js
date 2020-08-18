@@ -1,6 +1,5 @@
 const express = require('express')
 const cors = require('cors')
-const bodyParser = require('body-parser')
 const { getRooms, createRoom } = require('./utils/rooms')
 const { initRoomMessages, getRoomMessages, addMessage } = require('./utils/messages')
 const { addUser, getUser, removeUser } = require('./utils/users')
@@ -9,8 +8,6 @@ const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 
 app.use(cors())
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
 
 app.get('/api/chatrooms', (req, res) => {
   res.set(200).send(getRooms())

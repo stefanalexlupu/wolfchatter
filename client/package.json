@@ -32,7 +32,9 @@
       "plugin:vue/essential",
       "eslint:recommended"
     ],
-    "rules": {},
+    "rules": {
+      "semi": ["warn", "never"]
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }

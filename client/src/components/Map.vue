@@ -20,7 +20,6 @@ export default {
     }
   },
   mounted() {
-    // eslint-disable-next-line no-console
     this.initMap()
     this.isMapLoaded = true
   },
@@ -34,7 +33,7 @@ export default {
       })
 
       // Create a Tile Layer and add it to the map
-      new L.tileLayer('http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png').addTo(this.map);
+      new L.tileLayer('http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png').addTo(this.map)
       
       // Setup events:
       this.map.on('click', this.handleMapClick)
