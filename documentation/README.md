@@ -1,6 +1,6 @@
-## Architecture
+# Architecture
 
-### Entity relationship diagram
+## Entity relationship diagram
 
 Description:
 
@@ -9,9 +9,9 @@ Description:
 > and longitude coordinates. Other users can click on that pin and enter the
 > chatroom where they can see previous messages and create new messages.“
 
-![ERD Diagram](./documentation/Wolfchatter-ERD.png)
+![ERD Diagram](./Wolfchatter-ERD.png)
 
-### Components
+## Components
 
 ```
 App
@@ -22,23 +22,23 @@ App
 |   +-- MessageDialogue
 ```
 
-App
+### App
 * Root of the application
 
-Map
+### Map
 * Component representing the map and all related functionality, such as:
   * loading the tiles
   * initial state of the map
   * map interaction (clicking, zooming, etc.)
   * markers (?) 
 
-Marker
+### Marker
 * Representation of location on the map
 * Corresponding link to a chatroom
 * Depending on library implementation, might be configurable as nested
 component inside the map copmponent or not.
 
-Chatroom
+### Chatroom
 * Isolate chat widget
 * Data (map from application store):
   * Current room name
@@ -47,14 +47,14 @@ Chatroom
   * **No room selected**: display message to start a room
   * **A room is selected**: display messages from the current room
 
-Message
+### Message
 * Reusable component for holding a single message
 * Data (props):
   * message date
   * user name
   * message
 
-MessageDialogue
+### MessageDialogue
 * Component for representing new message form
 * Separate form logic from other components
 * Data (form model):
@@ -64,12 +64,17 @@ MessageDialogue
 Use a state management module such as `vuex` to manage the data shared across
 sibling components, for example:
 
-> When a user clicks on the map, load the chatroom history in the store for the
+> When a user clicks on a marker, load the chatroom history in the store for the
 > location selected by the user.
 
-### Communication
+## Communication
 
 1. Use a REST API in order to:
-    * GET all available chatrooms (with coordinates)
-    * GET chatroom messages (when user selects one)
-2. Use Socket.io to perform realtime message delivery
+    * GET all available chatrooms (with coordinates) - this will be used to load
+    the initial state of the map
+2. Use Websokets to perform realtime message delivery and updates of the maps,
+such as creating rooms.
+
+For creating the server, node will be used.
+For creating the REST API, express will be used.
+Websockets will be powered by Socket.IO
