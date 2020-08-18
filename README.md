@@ -44,7 +44,7 @@ npm run build
 
 Then you can serve the app from the generated dist folder.
 
-To start the server in development mode, run
+To launch the client app in development mode, run
 
 ```
 npm run serve
