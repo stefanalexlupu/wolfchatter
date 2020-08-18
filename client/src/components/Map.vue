@@ -9,6 +9,10 @@
 <script>
 import L from 'leaflet'
 import MapMarker from './MapMarker'
+
+const DEFAULT_COORDINATES = [46.7712, 23.6236]
+const DEFAULT_ZOOM = 5
+
 export default {
   components: {
     MapMarker
@@ -21,15 +25,29 @@ export default {
   },
   mounted() {
     this.initMap()
-    this.isMapLoaded = true
+
+    // Try set the map center at user location:
+    if (!navigator.geolocation) {
+      return
+    }
+    navigator
+      .geolocation
+      .getCurrentPosition(
+        ({ coords: { latitude, longitude} }) => {
+          this.map.panTo(new L.LatLng(latitude, longitude))
+        },
+        () => {
+          // User probably doesn't want to share location
+        }
+      )
   },
   methods: {
     initMap() {
       this.map = L.map('map', {
         // Set latitude and longitude of the map center (required)
-        center: [46.7712, 23.6236],
+        center: DEFAULT_COORDINATES,
         // Set the initial zoom level, values 0-18, where 0 is most zoomed-out (required)
-        zoom: 5
+        zoom: DEFAULT_ZOOM
       })
 
       // Create a Tile Layer and add it to the map
@@ -37,6 +55,8 @@ export default {
       
       // Setup events:
       this.map.on('click', this.handleMapClick)
+
+      this.isMapLoaded = true
     },
     handleMapClick(event) {
       this.$socket.emit('new-chatroom', event.latlng)
