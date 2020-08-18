@@ -7,7 +7,7 @@ import '@/assets/css/tailwind.css'
 Vue.config.productionTip = false
 
 Vue.use(new VueSocketIO({
-  debug: true,
+  debug: process.env.NODE_ENV === 'development',
   connection: 'http://localhost:8081',
   vuex: {
     store: store,
