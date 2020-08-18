@@ -53,9 +53,12 @@ io.on('connection', socket => {
 
   socket.on('chat-message', ({ userName, message }) => {
     const room = getUser(socket.id)
-    const createdMessage = addMessage(room, userName, message)
-
-    io.to(room).emit('new-message', createdMessage)
+    try {
+      const createdMessage = addMessage(room, userName, message)
+      io.to(room).emit('new-message', createdMessage)
+    } catch (error) {
+      console.error(`Failed to add message in room: ${room}\n`, error)
+    }
   })
 })
 
