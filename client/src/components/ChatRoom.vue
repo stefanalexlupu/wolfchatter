@@ -3,7 +3,7 @@
     <p v-if="!$store.state.activeRoom" class="font-bold">Click on the map to start a chat</p> 
     <div v-else class="flex flex-col h-full">
       <p class="chatroom__title text-center font-bold">{{ $store.state.activeRoom }}</p>
-      <ul class="chatroom__messages my-6 px-2 flex-grow overflow-y-auto">
+      <ul class="chatroom__messages my-6 px-2 flex-grow overflow-y-auto" ref="messageBox">
         <Message v-for="(message, index) in $store.state.messages" :key="index" :message="message"/>
       </ul>
       <MessageForm />
@@ -15,7 +15,15 @@
 import Message from './Message'
 import MessageForm from './MessageForm'
 export default {
-  components: {Message, MessageForm}
+  components: { Message, MessageForm },
+
+  watch: {
+    '$store.state.messages'() {
+      this.$nextTick().then(() => {
+        this.$refs.messageBox.scrollTo(0, this.$refs.messageBox.scrollHeight)
+      })
+    }
+  }
 }
 </script>
 
