@@ -1,5 +1,5 @@
 <template>
-  <div class="chatroom fixed top-2 right-2 z-1000 p-4 bg-white bg-opacity-90 rounded shadow">
+  <div :class="['chatroom', {'chatroom--is-open': $store.state.activeRoom} ,'fixed', 'top-2', 'right-2', 'z-1000', 'p-4', 'bg-white', 'bg-opacity-90', 'rounded', 'shadow']">
     <p v-if="!$store.state.activeRoom" class="font-bold">Click on the map to start a chat</p> 
     <div v-else class="flex flex-col h-full">
       <p class="chatroom__title text-center font-bold">{{ $store.state.activeRoom }}</p>
@@ -21,12 +21,10 @@ export default {
 
 <style>
 .chatroom {
-  height: 60%;
   width: 400px;
 }
 
-.chatroom__messages {
+.chatroom--is-open {
   height: 60%;
-  overflow: auto;
 }
 </style>

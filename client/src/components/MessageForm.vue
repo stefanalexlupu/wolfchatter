@@ -32,7 +32,7 @@ export default {
 
   methods: {
     onSubmit() {
-      if (!this.userName || !this.message) {
+      if (!this.userName.trim() || !this.message.trim()) {
         return
       }
 
