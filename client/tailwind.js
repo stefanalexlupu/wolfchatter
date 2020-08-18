@@ -1,5 +1,7 @@
 module.exports = {
-  purge: [],
+  purge: [
+    './src/**/*.vue'
+  ],
   theme: {
     zIndex: {
       '1000': '1000'
