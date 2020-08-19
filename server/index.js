@@ -1,8 +1,8 @@
 const express = require('express')
 const cors = require('cors')
-const { getRooms, createRoom } = require('./utils/rooms')
-const { initRoomMessages, getRoomMessages, addMessage } = require('./utils/messages')
-const { addUser, getUser, removeUser } = require('./utils/users')
+const { getRooms, createRoom, joinRoom } = require('./utils/rooms')
+const { initRoomMessages, addMessage } = require('./utils/messages')
+const { getUser, removeUser } = require('./utils/users')
 const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
@@ -20,25 +20,10 @@ io.on('connection', socket => {
     io.emit('new-room', room)
 
     // Add user to new room
-    socket.join(room.name)
-    addUser(socket.id, room.name)
-    socket.emit('join-chatroom', {
-      roomName: room.name,
-      messages: getRoomMessages(room.name)
-    })
+    joinRoom(socket, room.name)
   })
   socket.on('join-chatroom', (roomName) => {
-    socket.join(roomName)
-    addUser(socket.id, roomName)
-
-    try {
-      socket.emit('join-chatroom', {
-        roomName,
-        messages: getRoomMessages(roomName)
-      })
-    } catch (error) {
-      console.error(error)
-    }
+    joinRoom(socket, roomName)
   })
 
   socket.on('leave-chatroom', () => {
