@@ -1,14 +1,14 @@
 const messages = {}
 
-function initRoomMessages (roomName) {
-  if (messages[roomName]) {
+function initRoomMessages (roomId) {
+  if (messages[roomId]) {
     throw new Error('Room already has conversation!')
   }
-  messages[roomName] = []
+  messages[roomId] = []
 }
 
-function addMessage (roomName, userName, message) {
-  if (!messages[roomName]) {
+function addMessage (roomId, userName, message) {
+  if (!messages[roomId]) {
     throw new Error('Room not found')
   }
   const messageObj = Object.freeze({
@@ -16,17 +16,17 @@ function addMessage (roomName, userName, message) {
     message,
     date: new Date()
   })
-  messages[roomName].push(messageObj)
+  messages[roomId].push(messageObj)
 
   return messageObj
 }
 
-function getRoomMessages (roomName) {
-  if (messages[roomName]) {
-    return messages[roomName]
+function getRoomMessages (roomId) {
+  if (messages[roomId]) {
+    return messages[roomId]
   }
 
-  throw new Error(`No messages for room: ${roomName}`)
+  throw new Error(`No messages for room: ${roomId}`)
 }
 
 module.exports = {

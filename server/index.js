@@ -14,16 +14,20 @@ app.get('/api/chatrooms', (req, res) => {
 })
 
 io.on('connection', socket => {
-  socket.on('new-chatroom', (coordinates) => {
-    const room = createRoom(coordinates)
-    initRoomMessages(room.name)
-    io.emit('new-room', room)
+  socket.on('new-chatroom', async (coordinates) => {
+    try {
+      const room = await createRoom(coordinates)
+      initRoomMessages(room.id)
+      io.emit('new-room', room)
 
-    // Add user to new room
-    joinRoom(socket, room.name)
+      // Add user to new room
+      joinRoom(socket, room.id)
+    } catch (error) {
+      console.log(error)
+    }
   })
-  socket.on('join-chatroom', (roomName) => {
-    joinRoom(socket, roomName)
+  socket.on('join-chatroom', (roomId) => {
+    joinRoom(socket, roomId)
   })
 
   socket.on('leave-chatroom', () => {
