@@ -1,32 +1,58 @@
+/* eslint-disable camelcase */
+
 const addUser = require('./users').addUser
 const getRoomMessages = require('./messages').getRoomMessages
+const { reverse } = require('../services/nominatim')
 
-const rooms = []
-let roomIndex = 0
+const rooms = {}
 
-function createRoom (coordinates) {
-  // TODO: MAKE SURE ROOM DOES NOT EXIST FOR THE COORDINATES YET!
+async function createRoom (coordinates) {
+  let placeId, displayName
+  try {
+    const { place_id, display_name, name } = await reverse(coordinates.lat, coordinates.lng)
+    placeId = place_id
+    displayName = name || display_name
+  } catch (error) {
+    console.log(error)
+    return Promise.reject(new Error('Cannot find location'))
+  }
 
-  const room = Object.freeze({
-    name: `chatroom-${++roomIndex}`,
+  let room = getRoom(placeId)
+
+  if (room) {
+    return room
+  }
+  room = Object.freeze({
+    name: displayName,
+    id: placeId,
     coordinates
   })
-  rooms.push(room)
+  rooms[placeId] = room
   return room
 }
 
-function getRooms () {
-  return [...rooms]
+function getRoom (roomId) {
+  for (const id in rooms) {
+    if (id === roomId) {
+      return rooms[id]
+    }
+  }
+
+  return null
 }
 
-function joinRoom (socket, roomName) {
-  socket.join(roomName)
-  addUser(socket.id, roomName)
+function getRooms () {
+  return Object.values(rooms)
+}
+
+function joinRoom (socket, roomId) {
+  socket.join(roomId)
+  addUser(socket.id, roomId)
 
   try {
     socket.emit('join-chatroom', {
-      roomName,
-      messages: getRoomMessages(roomName)
+      roomName: rooms[roomId].name,
+      messages: getRoomMessages(roomId)
     })
   } catch (error) {
     console.error(error)
