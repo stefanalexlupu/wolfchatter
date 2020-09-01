@@ -9,6 +9,7 @@
 <script>
 import L from 'leaflet'
 import MapMarker from './MapMarker'
+import { getCurrentLocation } from '../api/geolocation'
 
 const DEFAULT_COORDINATES = [46.7712, 23.6236]
 const DEFAULT_ZOOM = 5
@@ -23,25 +24,23 @@ export default {
       isMapLoaded: false
     }
   },
+  
   mounted() {
     this.initMap()
-
-    // Try set the map center at user location:
-    if (!navigator.geolocation) {
-      return
-    }
-    navigator
-      .geolocation
-      .getCurrentPosition(
-        ({ coords: { latitude, longitude} }) => {
-          this.map.panTo(new L.LatLng(latitude, longitude))
-        },
-        () => {
-          // User probably doesn't want to share location
-        }
-      )
+    this.showCloseToUserLocation()
   },
+
   methods: {
+    showCloseToUserLocation() {
+      // Try set the map center at user location:
+      getCurrentLocation()
+        .then(({ lat, lng }) => {
+          this.$store.dispatch('getRoomsCloseToLocation', { lat, lng })
+          this.map.panTo(new L.LatLng(lat, lng))
+          this.map.zoomIn(5)
+        })
+        .catch((reason) => { console.error(reason)})
+    },
     initMap() {
       this.map = L.map('map', {
         // Set latitude and longitude of the map center (required)

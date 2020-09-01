@@ -3,6 +3,7 @@
 const addUser = require('./users').addUser
 const getRoomMessages = require('./messages').getRoomMessages
 const { reverse } = require('../services/nominatim')
+const { metricDistanceBetweenCoordinates } = require('../services/coordinates')
 
 const rooms = {}
 
@@ -28,6 +29,8 @@ async function createRoom (coordinates) {
     coordinates
   })
   rooms[placeId] = room
+
+  console.log('createdRoom: ', room.coordinates)
   return room
 }
 
@@ -43,6 +46,19 @@ function getRoom (roomId) {
 
 function getRooms () {
   return Object.values(rooms)
+}
+
+function getRoomsCloseTo (coordinates, radius) {
+  const rooms = getRooms()
+
+  return rooms.filter(({ coordinates: roomCoordinates }) => {
+    console.log('checking ', roomCoordinates)
+    console.log('\t distance to ', coordinates)
+    const distance = metricDistanceBetweenCoordinates(coordinates, roomCoordinates)
+    console.log('\t', distance)
+
+    return distance <= radius
+  })
 }
 
 function joinRoom (socket, roomId) {
@@ -62,5 +78,6 @@ function joinRoom (socket, roomId) {
 module.exports = {
   createRoom,
   getRooms,
-  joinRoom
+  joinRoom,
+  getRoomsCloseTo
 }

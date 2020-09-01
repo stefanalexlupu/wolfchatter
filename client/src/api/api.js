@@ -1,7 +1,9 @@
 const API_ROOT = 'http://localhost:8081/api'
 
-async function getChatrooms() {
-  const response = await fetch(`${API_ROOT}/chatrooms`)
+async function getChatrooms(params = {}) {
+  const url = new URL(`${API_ROOT}/chatrooms`)
+  url.search = new URLSearchParams(params)
+  const response = await fetch(url)
   const rooms = await response.json()
 
   return rooms

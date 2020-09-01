@@ -8,6 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     rooms: [],
+    closeRooms: [],
     activeRoom: '',
     messages: []
   },
@@ -17,6 +18,9 @@ export default new Vuex.Store({
     },
     setRooms(state, rooms) {
       state.rooms = rooms
+    },
+    setCloseRooms(state, rooms) {
+      state.closeRooms = rooms
     },
     setRoom(state, roomName) {
       state.activeRoom = roomName
@@ -38,6 +42,14 @@ export default new Vuex.Store({
     },
     'SOCKET_new-message'(context, message) {
       context.commit('addMessage', message)
+    },
+    async getRoomsCloseToLocation(context, coordinates) {
+      try {
+        const rooms = await api.getChatrooms(coordinates)
+        context.commit('setCloseRooms', rooms)
+      } catch(error) {
+        console.error(error)
+      }
     },
     async loadRooms(context) {
       try {

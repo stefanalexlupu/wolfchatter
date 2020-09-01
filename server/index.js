@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
-const { getRooms, createRoom, joinRoom } = require('./utils/rooms')
+const bodyParser = require('body-parser')
+const { getRooms, createRoom, joinRoom, getRoomsCloseTo } = require('./utils/rooms')
 const { initRoomMessages, addMessage } = require('./utils/messages')
 const { getUser, removeUser } = require('./utils/users')
 const app = express()
@@ -8,8 +9,14 @@ const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 
 app.use(cors())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
-app.get('/api/chatrooms', (req, res) => {
+app.get('/api/chatrooms', ({ query: { lat = null, lng = null, radius = 10000 } }, res) => {
+  if (lat && lng) {
+    return res.set(200).send(getRoomsCloseTo({ lat, lng }, radius))
+  }
+
   res.set(200).send(getRooms())
 })
 
